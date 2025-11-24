@@ -2,6 +2,7 @@ package it.unibo.oop.lab.lambda;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,9 +13,6 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 
 /**
  * This class will contain four utility functions on lists and maps, of which the first one is provided as example.
@@ -64,7 +62,11 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Optional.filter
          */
-        return emptyList();
+        final List<Optional<T>> results = new ArrayList<>();
+        list.forEach(elem -> results.add(Optional.of(elem)
+                                    .filter(pre))
+                                );
+        return results;
     }
 
     /**
@@ -83,7 +85,15 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        return emptyMap();
+        final Map<R, Set<T>> results = new HashMap<>();
+        list.forEach(elem -> results.merge(op.apply(elem), 
+                    new HashSet<>(Set.of(elem)),
+                    (oldSet, newSet) -> { //is know that the enter parameters of the lambda are: the old and the new value
+                                        oldSet.add(elem);
+                                        return oldSet;
+                    })
+        );
+        return results;
     }
 
     /**
@@ -104,7 +114,10 @@ public final class LambdaUtilities {
          *
          * Keep in mind that a map can be iterated through its forEach method
          */
-        return emptyMap();
+        final Map<K, V> result = new HashMap<>();
+        map.forEach((key, optValue) -> {
+            result.put(key, optValue.orElse(def.get())); });
+        return result;
     }
 
     /**
