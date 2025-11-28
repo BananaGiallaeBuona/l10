@@ -82,7 +82,12 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      * @throws FileNotFoundException 
      */
     public static void main(final String... args) throws FileNotFoundException {
-        new DrawNumberApp(new DrawNumberViewImpl());
+        new DrawNumberApp(
+            new DrawNumberViewImpl(),           // 1. Prima vista grafica
+            new DrawNumberViewImpl(),           // 2. Seconda vista grafica
+            new PrintStreamView(System.out),    // 3. Vista su console (Standard Output)
+            new PrintStreamView("output.log")   // 4. Vista su file (Logger)
+        );
     }
 
 }
